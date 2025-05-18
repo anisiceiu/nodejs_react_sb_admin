@@ -10,6 +10,6 @@ const doc = {
 };
 
 const outputFile = './swagger.json';
-const endpointsFiles = ['./app.js']; // Entry point of your Express app
+const endpointsFiles = ['./server.js']; // Entry point of your Express app
 
 swaggerAutogen(outputFile, endpointsFiles, doc);

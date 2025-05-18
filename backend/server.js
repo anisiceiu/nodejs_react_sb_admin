@@ -2,13 +2,32 @@ const express = require('express');
 const cors = require('cors');
 const swaggerJsdoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
-const userRouter = require('./routes/user');
+const db = require('./models');
+const routes = require('./routes');
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
+// Routes
+app.use('/api', routes);
+
+// Database connection
+db.sequelize.sync()
+  .then(() => {
+    console.log('Database connected');
+  })
+  .catch(err => {
+    console.error('Database connection error:', err);
+  });
+
+// Error handling
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ message: 'Something went wrong!' });
+});
 // Swagger configuration
 const swaggerOptions = {
   definition: {
@@ -18,11 +37,23 @@ const swaggerOptions = {
       version: '1.0.0',
       description: 'API documentation for your Node.js backend',
     },
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT'
+        }
+      }
+    },
+    security: [{
+      bearerAuth: []
+    }],
     servers: [
-      { url: 'http://localhost:5000' },
+      { url: 'http://localhost:5000/api' }, 
     ],
   },
-  apis: ['./server.js', './routes/*.js'],
+  apis: ['./server.js','./routes/*.js'], // This should point to your route files
 };
 
 const swaggerSpec = swaggerJsdoc(swaggerOptions);
@@ -57,7 +88,7 @@ app.get('/api/data', (req, res) => {
   res.json({ message: "Hello from Node.js!" });
 });
 
-app.use('/users', userRouter);
+
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
