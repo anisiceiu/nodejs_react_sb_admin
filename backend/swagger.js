@@ -1,24 +1,34 @@
-const swaggerAutogen = require('swagger-autogen')();
+const swaggerAutogen = require('swagger-autogen')({ openapi: '3.0.0' });
 
 const doc = {
   info: {
-    title: 'Your API',
+    title: 'Node.js API with Swagger',
     version: '1.0.0',
-    description: 'Automatically generated Swagger documentation'
+    description: 'API documentation for your Node.js backend',
   },
-  host: 'localhost:5000',
-  basePath: '/',
-  schemes: ['http'],
-  securityDefinitions: {
-    bearerAuth: {
-      type: 'http',
-      scheme: 'bearer',
-      bearerFormat: 'JWT'
-    }
-  }
+  servers: [
+    {
+      url: 'http://localhost:5000',
+      description: 'Development server',
+    },
+  ],
+  components: {
+    securitySchemes: {
+      bearerAuth: {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+      },
+    },
+  },
+  security: [
+    {
+      bearerAuth: [],
+    },
+  ],
 };
 
 const outputFile = './swagger.json';
-const endpointsFiles = ['./server.js']; // Your main server file
+const endpointsFiles = ['./server.js', './routes/*.js']; // Add your files here
 
 swaggerAutogen(outputFile, endpointsFiles, doc);
