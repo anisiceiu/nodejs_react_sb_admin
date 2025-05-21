@@ -3,9 +3,7 @@ const cors = require('cors');
 const swaggerUi = require('swagger-ui-express');
 const db = require('./models');
 const routes = require('./routes');
-const fs = require('fs');
-
-const swaggerDocument = JSON.parse(fs.readFileSync('./swagger.json'));
+const swaggerSpec = require('./swagger');
 
 const app = express();
 
@@ -28,7 +26,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/api', routes);
 
 // Swagger UI
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // Sample endpoint (optional)
 app.get('/api/data', (req, res) => {
