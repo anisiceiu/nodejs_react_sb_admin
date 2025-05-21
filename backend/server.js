@@ -14,10 +14,10 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-app.use((req, res, next) => {
+/* app.use((req, res, next) => {
   console.log('Request headers:', req.headers);
   next();
-});
+}); */
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -25,13 +25,13 @@ app.use(express.urlencoded({ extended: true }));
 // API routes
 app.use('/api', routes);
 
-// Swagger UI
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-
 // Sample endpoint (optional)
 app.get('/api/data', (req, res) => {
   res.json({ message: 'Hello from Node.js!' });
 });
+
+// Swagger UI
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // Database connection
 db.sequelize.sync()
