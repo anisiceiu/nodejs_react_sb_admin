@@ -1,4 +1,4 @@
-# Full-Stack Web Application
+# Full-Stack Web Application 
 
 This repository contains a full-stack web application built using the following technologies:
 
@@ -10,7 +10,7 @@ This repository contains a full-stack web application built using the following 
 
 ### ⚙️ Backend
 - **NodeJS** – RESTful API for business logic and data access
-- **Entity Framework Core** – ORM for SQL Server database interaction
+- **sequelize + tedious** – ORM for SQL Server database interaction
 - **JWT (JSON Web Token)** – Authentication and authorization middleware
 
 ---
